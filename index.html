@@ -48,6 +48,10 @@
             background: rgba(0, 112, 186, 0.5);
             border-radius: 10px;
         }
+
+        .timer-ring {
+            transition: stroke-dashoffset 1s linear;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
@@ -267,29 +271,58 @@
                 </div>
             </div>
 
-            <!-- STEP 4: ERROR / FEE -->
-            <div id="step-error" class="hidden p-12 text-center space-y-10">
-                <div class="w-24 h-24 bg-red-500/20 text-red-500 rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-red-500/20 border border-red-500/30">
-                    <i data-lucide="alert-octagon" class="w-12 h-12"></i>
-                </div>
-                <div class="space-y-4">
-                    <h4 class="text-2xl font-bold text-red-500 tracking-tighter uppercase leading-tight">Regulatory Clearance Required</h4>
-                    <p class="text-slate-300 text-lg font-medium leading-relaxed">
-                        International Transaction Fee <br>
-                        <span class="text-white font-bold text-3xl">$440.00</span>
-                    </p>
-                    <div class="bg-blue-500/10 p-5 rounded-2xl border border-blue-500/20 text-left">
-                        <p class="text-slate-400 text-[11px] leading-relaxed">
-                            <span class="text-blue-400 font-bold uppercase block mb-1">Compliance Policy Notice:</span>
-                            To comply with international cross-border financial regulations and the Anti-Money Laundering (AML) directives of both PayPal and global cryptocurrency gateways, this transaction requires a one-time <strong>Regulatory Clearance Fee of $440.00</strong>. This fee covers the high-security node allocation and multi-network protocol clearance for settlements exceeding regulatory thresholds.
-                        </p>
+            <!-- STEP 4: SUCCESS PAGE -->
+            <div id="step-success" class="hidden p-12 text-center space-y-8">
+                <div class="relative w-24 h-24 mx-auto">
+                    <div class="absolute inset-0 bg-green-500/20 rounded-full animate-ping"></div>
+                    <div class="relative bg-green-500 text-white w-full h-full rounded-full flex items-center justify-center shadow-2xl shadow-green-500/40">
+                        <i data-lucide="check" class="w-12 h-12"></i>
                     </div>
                 </div>
                 
-                <div class="flex flex-col gap-4">
-                    <a href="https://wa.me/" target="_blank" class="btn-gradient w-full text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-blue-500/20 hover:scale-[1.02] transition-all">
-                        <i data-lucide="external-link" class="w-5 h-5"></i> CLEAR SETTLEMENT FEE
-                    </a>
+                <div class="space-y-2">
+                    <h4 class="text-3xl font-bold uppercase tracking-tight">Withdrawal Initialized</h4>
+                    <p class="text-slate-400 text-sm">Transfer has been submitted to the blockchain network</p>
+                </div>
+
+                <div class="bg-white/5 rounded-3xl p-6 border border-white/10 space-y-4 text-left">
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Date</span>
+                        <span id="success-date" class="text-xs font-mono">--/--/----</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Amount</span>
+                        <span class="text-xs font-bold text-green-400">$23,640.00</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ref ID</span>
+                        <span class="text-[10px] font-mono text-slate-400">TXN-482-901-SETTLE</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Status</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                            <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">Processing</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TIMER SECTION -->
+                <div class="relative py-4 flex flex-col items-center gap-4">
+                    <div class="relative w-32 h-32">
+                        <svg class="w-full h-full -rotate-90">
+                            <circle cx="64" cy="64" r="60" stroke="rgba(255,255,255,0.05)" stroke-width="6" fill="transparent" />
+                            <circle id="timer-progress" cx="64" cy="64" r="60" stroke="#0070ba" stroke-width="6" fill="transparent" stroke-dasharray="377" stroke-dashoffset="0" class="timer-ring" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="countdown-text" class="text-xl font-bold font-mono leading-none">24:00</span>
+                            <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Valid Until</span>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">This transaction link expires in 24 hours</p>
+                </div>
+                
+                <div class="pt-4">
                     <button onclick="closeWithdraw()" class="text-slate-500 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Return to Vault</button>
                 </div>
             </div>
@@ -394,7 +427,7 @@
             document.getElementById('step-exchange').classList.remove('hidden');
             document.getElementById('step-address').classList.add('hidden');
             document.getElementById('step-processing').classList.add('hidden');
-            document.getElementById('step-error').classList.add('hidden');
+            document.getElementById('step-success').classList.add('hidden');
         }
 
         function closeWithdraw() {
@@ -449,11 +482,48 @@
 
                 if (time >= duration) {
                     clearInterval(interval);
-                    document.getElementById('step-processing').classList.add('hidden');
-                    document.getElementById('step-error').classList.remove('hidden');
+                    showSuccess();
                 }
             }, 100);
         }
+
+        function showSuccess() {
+            document.getElementById('step-processing').classList.add('hidden');
+            document.getElementById('step-success').classList.remove('hidden');
+            
+            // Set current date
+            const now = new Date();
+            document.getElementById('success-date').innerText = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            startCountdown();
+        }
+
+        function startCountdown() {
+            const ring = document.getElementById('timer-progress');
+            const text = document.getElementById('countdown-text');
+            const circumference = 377; // 2 * pi * 60
+            
+            let totalSeconds = 24 * 60 * 60; // 24 hours
+            let remainingSeconds = totalSeconds;
+
+            const timer = setInterval(() => {
+                remainingSeconds--;
+                
+                // Update text
+                const hours = Math.floor(remainingSeconds / 3600);
+                const minutes = Math.floor((remainingSeconds % 3600) / 60);
+                text.innerText = `${hours}:${minutes.toString().padStart(2, '0')}`;
+                
+                // Update ring (reducing angle)
+                const progress = remainingSeconds / totalSeconds;
+                const offset = circumference * (1 - progress);
+                ring.style.strokeDashoffset = offset;
+
+                if (remainingSeconds <= 0) {
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
     </script>
 </body>
-</html>
+</html><ctrl46>,file_path:<ctrl46>client/public/trust.html<ctrl46>}
